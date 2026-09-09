@@ -8,7 +8,8 @@ const DISC_LABELS: Record<Disc, string> = { ba: 'BA', dev: 'Dev', pm: 'PM', ops:
 const ACTIVE_STAGES = ['Under assessment', 'Approved, not started', 'In delivery'];
 
 export default function PrioritisedRanking() {
-  const { initiatives, capacityAvailable, setCapacityAvailable } = useApp();
+  const { initiatives, capacityAvailable, setCapacityAvailable, permission } = useApp();
+  const isAdmin = permission === 'Admin';
 
   const ranked = initiatives
     .filter(i => ACTIVE_STAGES.includes(i.stage))
@@ -47,17 +48,24 @@ export default function PrioritisedRanking() {
           {DISCS.map(d => (
             <div key={d}>
               <label className="block text-xs font-bold text-[#0E2841] uppercase mb-1">{DISC_LABELS[d]}</label>
-              <input
-                type="number"
-                min={0}
-                className="w-full text-sm font-semibold border border-[#E4E7EA] rounded px-3 py-2 focus:outline-none focus:border-[#0E2841]"
-                value={capacityAvailable[d]}
-                onChange={e => handleCapChange(d, e.target.value)}
-              />
+              {isAdmin ? (
+                <input
+                  type="number"
+                  min={0}
+                  className="w-full text-sm font-semibold border border-[#E4E7EA] rounded px-3 py-2 focus:outline-none focus:border-[#0E2841]"
+                  value={capacityAvailable[d]}
+                  onChange={e => handleCapChange(d, e.target.value)}
+                />
+              ) : (
+                <p className="text-sm font-semibold text-gray-700 px-3 py-2">{capacityAvailable[d]}</p>
+              )}
             </div>
           ))}
         </div>
-        <p className="text-xs text-gray-400 mt-2">Ranked by effective score (agreed score, overridden by POB where flagged). Changing capacity inputs recalculates the line instantly.</p>
+        <p className="text-xs text-gray-400 mt-2">
+          Ranked by effective score (agreed score, overridden by POB where flagged).
+          {isAdmin ? ' Changing capacity inputs recalculates the line instantly.' : ' Capacity is set by an Admin in Settings.'}
+        </p>
       </div>
 
       {aboveLine.length > 0 && (

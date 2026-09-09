@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import type { Initiative, Role, Screen, DecisionLogEntry } from './types';
-import { SEED_INITIATIVES } from './data';
+import type { Initiative, Role, Permission, Screen, DecisionLogEntry } from './types';
 
 interface AppState {
   initiatives: Initiative[];
   role: Role;
+  permission: Permission;
   currentScreen: Screen;
   selectedInitiativeId: string | null;
   toast: string | null;
@@ -14,6 +14,7 @@ interface AppState {
 
 interface AppActions {
   setRole: (role: Role) => void;
+  setPermission: (permission: Permission) => void;
   navigateTo: (screen: Screen) => void;
   openDrawer: (id: string) => void;
   closeDrawer: () => void;
@@ -27,12 +28,13 @@ interface AppActions {
 const AppContext = createContext<(AppState & AppActions) | null>(null);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [initiatives, setInitiatives] = useState<Initiative[]>(SEED_INITIATIVES);
+  const [initiatives, setInitiatives] = useState<Initiative[]>([]);
   const [role, setRoleState] = useState<Role>('Portfolio Delivery');
+  const [permission, setPermission] = useState<Permission>('Reviewer');
   const [currentScreen, setCurrentScreen] = useState<Screen>('portfolio');
   const [selectedInitiativeId, setSelectedInitiativeId] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
-  const [capacityAvailable, setCapAvail] = useState({ ba: 60, dev: 120, pm: 40, ops: 35 });
+  const [capacityAvailable, setCapAvail] = useState({ ba: 0, dev: 0, pm: 0, ops: 0 });
   const [decisionLog, setDecisionLog] = useState<DecisionLogEntry[]>([]);
 
   const setRole = useCallback((r: Role) => {
@@ -80,12 +82,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       value={{
         initiatives,
         role,
+        permission,
         currentScreen,
         selectedInitiativeId,
         toast,
         capacityAvailable,
         decisionLog,
         setRole,
+        setPermission,
         navigateTo,
         openDrawer,
         closeDrawer,

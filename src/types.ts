@@ -25,6 +25,7 @@ export type Stage =
 export type RAG = 'Green' | 'Amber' | 'Red';
 export type Priority = 'Low' | 'Medium' | 'High' | 'Critical';
 export type Role = 'Requester' | 'Delivery Ops' | 'Portfolio Delivery' | 'POB';
+export type Permission = 'Viewer' | 'Reviewer' | 'Admin';
 
 export type BusinessArea =
   | 'Central Ops'
@@ -114,4 +115,5 @@ export type Screen =
   | 'capacity'
   | 'ranking'
   | 'plan'
-  | 'board';
+  | 'board'
+  | 'settings';
