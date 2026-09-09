@@ -1,0 +1,10 @@
+{
+  "description": "This web application streamlines code review by automatically analyzing and generating feedback, enhancing collaboration for developers and teams.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
